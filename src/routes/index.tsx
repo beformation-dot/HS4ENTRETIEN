@@ -106,7 +106,34 @@ function Home() {
         <p className="mt-1 text-sm text-muted-foreground">
           Ces infos pré-remplissent chaque nouvelle check-list.
         </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <Field label="Nom">
+            <Input
+              placeholder="Dupont"
+              autoComplete="family-name"
+              value={hydrated ? (vehicle.lastName ?? "") : ""}
+              onChange={(e) => setVehicle({ lastName: e.target.value })}
+            />
+          </Field>
+          <Field label="Prénom">
+            <Input
+              placeholder="Jean"
+              autoComplete="given-name"
+              value={hydrated ? (vehicle.firstName ?? "") : ""}
+              onChange={(e) => setVehicle({ firstName: e.target.value })}
+            />
+          </Field>
+        </div>
+        <div className="mt-3">
+          <Field label="Ligne">
+            <Input
+              placeholder="Adresse, téléphone…"
+              value={hydrated ? (vehicle.line ?? "") : ""}
+              onChange={(e) => setVehicle({ line: e.target.value })}
+            />
+          </Field>
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <Field label="Immatriculation">
             <Input
               className="uppercase"

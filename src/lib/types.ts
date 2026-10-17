@@ -41,6 +41,9 @@ export type Inspection = {
 };
 
 export type Vehicle = {
+  lastName: string;
+  firstName: string;
+  line: string;
   plate: string;
   year: string;
   km: string;

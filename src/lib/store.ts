@@ -51,7 +51,7 @@ export const useGarage = create<GarageState>()(
   persist(
     (set, get) => ({
       hydrated: false,
-      vehicle: { plate: "", year: "", km: "" },
+      vehicle: { lastName: "", firstName: "", line: "", plate: "", year: "", km: "" },
       inspections: [],
       setHydrated: (v) => set({ hydrated: v }),
       setVehicle: (patch) =>

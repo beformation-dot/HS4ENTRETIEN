@@ -15,6 +15,7 @@ export const Route = createFileRoute("/imprimer/$id")({
 function PrintPage() {
   const { id } = Route.useParams();
   const inspection = useGarage((s) => s.inspections.find((i) => i.id === id));
+  const vehicle = useGarage((s) => s.vehicle);
   const update = useGarage((s) => s.updateInspection);
   const [pdfBusy, setPdfBusy] = useState(false);
 
@@ -69,7 +70,12 @@ function PrintPage() {
           <p className="font-display text-center text-2xl tracking-[0.16em] uppercase">
             Trike Rewaco HS4
           </p>
-          <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+          <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
+            <Cell label="Nom" value={vehicle.lastName || "—"} />
+            <Cell label="Prénom" value={vehicle.firstName || "—"} />
+            <Cell label="Ligne" value={vehicle.line || "—"} />
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
             <Cell label="Date" value={formatDate(inspection.date)} />
             <Cell label="Kilomètre" value={formatKm(inspection.km)} />
             <Cell label="N° immatriculation" value={inspection.plate || "—"} />

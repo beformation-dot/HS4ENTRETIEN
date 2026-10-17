@@ -59,7 +59,7 @@ export function NewInspectionDialog({
 
   function start() {
     setVehicle({ km, plate, year });
-    const insp = emptyInspection({ km, plate, year });
+    const insp = emptyInspection({ ...vehicle, km, plate, year });
     insp.date = date;
     addInspection(insp);
     onOpenChange(false);

@@ -2,6 +2,7 @@ import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 import { ITEMS, SECTIONS, itemsForSection, tally } from "@/lib/checklist";
 import type { Inspection, ItemStatus } from "@/lib/types";
+import { useGarage } from "@/lib/store";
 import { formatDate, formatKm } from "@/lib/utils";
 
 const PAGE_W = 595.28;
@@ -154,28 +155,46 @@ export async function buildInspectionPdf(inspection: Inspection, fonts: FontByte
       });
       y += 20;
     }
-    const cells: [string, string][] = [
-      ["Date", formatDate(inspection.date)],
-      ["Kilomètre", formatKm(inspection.km)],
-      ["Immatriculation", inspection.plate || "—"],
-      ["Année", inspection.year || "—"],
-    ];
-    const cellW = (PAGE_W - M * 2) / 4;
-    const cellH = 26;
-    cells.forEach(([label, value], i) => {
-      const x = M + i * cellW;
-      state.page.drawRectangle({
-        x,
-        y: PAGE_H - y - cellH,
-        width: cellW,
-        height: cellH,
-        borderColor: INK,
-        borderWidth: 0.6,
+    const vehicle = useGarage.getState().vehicle;
+    const paintRow = (cells: [string, string][], top: number) => {
+      const cellW = (PAGE_W - M * 2) / cells.length;
+      const cellH = 26;
+      cells.forEach(([label, value], i) => {
+        const x = M + i * cellW;
+        state.page.drawRectangle({
+          x,
+          y: PAGE_H - top - cellH,
+          width: cellW,
+          height: cellH,
+          borderColor: INK,
+          borderWidth: 0.6,
+        });
+        paint(label.toUpperCase(), x + 4, top + 3, 6.5, bold, MUTED);
+        paint(value, x + 4, top + 13, 9, regular);
       });
-      paint(label.toUpperCase(), x + 4, y + 3, 6.5, bold, MUTED);
-      paint(value, x + 4, y + 13, 9, regular);
-    });
-    y += cellH + 12;
+      return cellH;
+    };
+    if (!continued) {
+      y += paintRow(
+        [
+          ["Nom", vehicle.lastName || "—"],
+          ["Prénom", vehicle.firstName || "—"],
+          ["Ligne", vehicle.line || "—"],
+        ],
+        y,
+      );
+      y += 6;
+    }
+    y += paintRow(
+      [
+        ["Date", formatDate(inspection.date)],
+        ["Kilomètre", formatKm(inspection.km)],
+        ["Immatriculation", inspection.plate || "—"],
+        ["Année", inspection.year || "—"],
+      ],
+      y,
+    );
+    y += 12;
     state.top = y;
     state.contentTop = y;
     state.ends = [y, y];
