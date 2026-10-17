@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { AppShell } from "@/components/app-shell";
 import { InspectionCard } from "@/components/inspection-card";
 import { NewInspectionButton } from "@/components/new-inspection";
+import { InstallAppButton } from "@/components/install-app";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +55,7 @@ function Home() {
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             <NewInspectionButton label="Démarrer un contrôle" />
+            <InstallAppButton />
             <Button variant="outline" asChild>
               <Link to="/plan">Voir le plan</Link>
             </Button>
