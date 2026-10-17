@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/pieces",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 532,
+      "bodyTextHash": "9cccddbe48bc2ad1805d002a775831ce02a5d4ade151825e990556b3977ac101",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique FOURNISSEURS",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/pieces.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 449,
+      "bodyTextHash": "c0aef0b0c49fabbd2aaacc5fa919f924f501656261b982e00791eee5f48f5a0d",
+      "bodyTextPrefix": "ATELIER HS4 FOURNISSEURS Pièces à connaître Les vendeurs listés ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/pieces-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/pieces.json"
+}

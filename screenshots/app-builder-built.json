@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 679,
+      "bodyTextHash": "0ddc70d93efc1abd3621fc0d1c9153fba723edc58352de44456a52460746d010",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique FICHE ATELIE",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 587,
+      "bodyTextHash": "962ffb3925ccffe0a8af0daf726315fe9e66ae8782123254c950bfce9b3ab71f",
+      "bodyTextPrefix": "ATELIER HS4 FICHE ATELIER · REWACO HS4 Entretien & check-list 73",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": true,
+  "baselineReasons": [
+    "desktop: body text changed (587 -> 679 chars, hash mismatch)"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/controle",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 307,
+      "bodyTextHash": "9d26457facb560c7ba6f4b5fa1e0cd2d54ab4aaec1df6986275d8abeb404c2dd",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique CHECK-LIST H",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/controle-restyle.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 307,
+      "bodyTextHash": "a8496cf5fff3c9ef4c423e40b71d8e54dec05bc4031c5810032379012cbdb72a",
+      "bodyTextPrefix": "ATELIER HS4 CHECK-LIST HS4 Contrôle Nouveau Passez les points un",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/controle-restyle-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/controle-restyle.json"
+}

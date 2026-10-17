@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/plan",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 485,
+      "bodyTextHash": "60f4bc9201754f1f39b33ca7e34e85e5425977779c7a6ca14a4b1ce9e53d75f1",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique REPÉRAGE Pla",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/plan-restyle.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 485,
+      "bodyTextHash": "f0804dddc781ac72d2415c88daf14890aba963bedaf06b1dd1273ea1bee82c41",
+      "bodyTextPrefix": "ATELIER HS4 REPÉRAGE Plan du trike Touchez un numéro pour le loc",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/plan-restyle-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/plan-restyle.json"
+}

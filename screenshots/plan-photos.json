@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/plan",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 2382,
+      "bodyTextHash": "6e93fcd25a227b530ce63460d7cfdf1a1ff95358c0ba1a82dfe9dbe78113cdb6",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique REPÉRAGE Pla",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/plan-photos.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 2382,
+      "bodyTextHash": "0ce52359bddfe036962421106cdf9804d45d10208f67db28433e26258f28fd1d",
+      "bodyTextPrefix": "ATELIER HS4 REPÉRAGE Plan du trike Schéma du formulaire papier. ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/plan-photos-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/plan-photos.json"
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 587,
+      "bodyTextHash": "c096c97407b30a8268f5aca4007310a6935859a1642c71b7b4a9f7094f33ebd9",
+      "bodyTextPrefix": "ATELIER HS4 Accueil Contrôle Plan Pièces Historique FICHE ATELIE",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Atelier HS4",
+      "hasCanvas": false,
+      "bodyTextLen": 587,
+      "bodyTextHash": "962ffb3925ccffe0a8af0daf726315fe9e66ae8782123254c950bfce9b3ab71f",
+      "bodyTextPrefix": "ATELIER HS4 FICHE ATELIER · REWACO HS4 Entretien & check-list 73",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

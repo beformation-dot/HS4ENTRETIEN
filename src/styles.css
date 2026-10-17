@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: #3a261c;
+  --color-foreground: #f6ead8;
+  --color-card: #4a3226;
+  --color-card-foreground: #f6ead8;
+  --color-muted: #5a3e30;
+  --color-muted-foreground: #d2b79a;
+  --color-primary: #e07028;
+  --color-primary-foreground: #1f0e08;
+  --color-accent: #e07028;
+  --color-accent-foreground: #1f0e08;
+  --color-border: #6a4a38;
+  --color-ring: #e07028;
+  --color-ok: #4a9d6e;
+  --color-ok-fg: #07140c;
+  --color-warn: #e07028;
+  --color-warn-fg: #1f0e08;
+  --color-bad: #c45c54;
+  --color-bad-fg: #1a0908;
+  --color-paper: #f6ead8;
+  --color-ink: #2a1810;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  --shadow-border: 0 0 0 1px rgba(246, 234, 216, 0.1);
+  --shadow-border-hover: 0 0 0 1px rgba(224, 112, 40, 0.45);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img {
+    outline: 1px solid rgba(246, 234, 216, 0.12);
+    outline-offset: -1px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.85) sepia(0.4) saturate(2) hue-rotate(350deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.print-note {
+  color: #c42020;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-note::placeholder {
+  color: #c42020;
+  opacity: 0.45;
+}
+
+@media print {
+  html,
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-note {
+    color: #c42020 !important;
+  }
+
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  img {
+    outline: none;
+  }
+}
