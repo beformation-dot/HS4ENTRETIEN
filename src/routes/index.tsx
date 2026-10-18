@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { InspectionCard } from "@/components/inspection-card";
 import { NewInspectionButton } from "@/components/new-inspection";
 import { InstallAppButton } from "@/components/install-app";
+import { SyncPanel } from "@/components/sync-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -164,6 +165,8 @@ function Home() {
           </Field>
         </div>
       </section>
+
+      <SyncPanel />
 
       <section className="mt-8">
         <SectionHead title="Historique" href="/historique" />

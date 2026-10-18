@@ -32,6 +32,9 @@ export function emptyInspection(vehicle: Vehicle): Inspection {
 type GarageState = {
   hydrated: boolean;
   vehicle: Vehicle;
+  vehicleUpdatedAt: string;
+  dataUpdatedAt: string;
+  tombstones: Record<string, string>;
   inspections: Inspection[];
   setHydrated: (v: boolean) => void;
   setVehicle: (patch: Partial<Vehicle>) => void;
@@ -45,6 +48,13 @@ type GarageState = {
   setItemNote: (id: string, itemId: string, note: string) => void;
   deleteInspection: (id: string) => void;
   duplicateInspection: (id: string) => Inspection | null;
+  replaceSynced: (snapshot: {
+    vehicle: Vehicle;
+    vehicleUpdatedAt: string;
+    inspections: Inspection[];
+    tombstones: Record<string, string>;
+    dataUpdatedAt: string;
+  }) => void;
 };
 
 export const useGarage = create<GarageState>()(
@@ -52,14 +62,25 @@ export const useGarage = create<GarageState>()(
     (set, get) => ({
       hydrated: false,
       vehicle: { lastName: "", firstName: "", line: "", plate: "", year: "", km: "" },
+      vehicleUpdatedAt: "",
+      dataUpdatedAt: "",
+      tombstones: {},
       inspections: [],
       setHydrated: (v) => set({ hydrated: v }),
       setVehicle: (patch) =>
-        set((s) => ({ vehicle: { ...s.vehicle, ...patch } })),
+        set((s) => ({
+          vehicle: { ...s.vehicle, ...patch },
+          vehicleUpdatedAt: new Date().toISOString(),
+          dataUpdatedAt: new Date().toISOString(),
+        })),
       addInspection: (insp) =>
-        set((s) => ({ inspections: [insp, ...s.inspections] })),
+        set((s) => ({
+          inspections: [insp, ...s.inspections],
+          dataUpdatedAt: new Date().toISOString(),
+        })),
       updateInspection: (id, patch) =>
         set((s) => ({
+          dataUpdatedAt: new Date().toISOString(),
           inspections: s.inspections.map((i) =>
             i.id === id
               ? { ...i, ...patch, updatedAt: new Date().toISOString() }
@@ -75,9 +96,11 @@ export const useGarage = create<GarageState>()(
             else items[itemId] = status;
             return { ...i, items, updatedAt: new Date().toISOString() };
           }),
+          dataUpdatedAt: new Date().toISOString(),
         })),
       setItemNote: (id, itemId, note) =>
         set((s) => ({
+          dataUpdatedAt: new Date().toISOString(),
           inspections: s.inspections.map((i) => {
             if (i.id !== id) return i;
             const notes = { ...i.notes, [itemId]: note };
@@ -86,6 +109,8 @@ export const useGarage = create<GarageState>()(
         })),
       deleteInspection: (id) =>
         set((s) => ({
+          dataUpdatedAt: new Date().toISOString(),
+          tombstones: { ...s.tombstones, [id]: new Date().toISOString() },
           inspections: s.inspections.filter((i) => i.id !== id),
         })),
       duplicateInspection: (id) => {
@@ -104,9 +129,20 @@ export const useGarage = create<GarageState>()(
           notes: { ...src.notes },
           maintenance: { ...src.maintenance },
         };
-        set((s) => ({ inspections: [copy, ...s.inspections] }));
+        set((s) => ({
+          inspections: [copy, ...s.inspections],
+          dataUpdatedAt: now,
+        }));
         return copy;
       },
+      replaceSynced: (snapshot) =>
+        set({
+          vehicle: snapshot.vehicle,
+          vehicleUpdatedAt: snapshot.vehicleUpdatedAt,
+          inspections: snapshot.inspections,
+          tombstones: snapshot.tombstones,
+          dataUpdatedAt: snapshot.dataUpdatedAt,
+        }),
     }),
     {
       name: "atelier-hs4-v1",
@@ -116,6 +152,9 @@ export const useGarage = create<GarageState>()(
       },
       partialize: (s) => ({
         vehicle: s.vehicle,
+        vehicleUpdatedAt: s.vehicleUpdatedAt,
+        dataUpdatedAt: s.dataUpdatedAt,
+        tombstones: s.tombstones,
         inspections: s.inspections,
       }),
     },

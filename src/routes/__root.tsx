@@ -7,6 +7,7 @@ import {
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { RegisterApp } from "@/components/install-app";
+import { SyncEngine } from "@/components/sync-panel";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Atelier HS4";
@@ -55,6 +56,7 @@ export const Route = createRootRoute({
       <body>
         <PreviewHostBridge />
         <RegisterApp />
+        <SyncEngine />
         <AuthProvider>
           <Outlet />
         </AuthProvider>
