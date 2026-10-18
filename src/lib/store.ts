@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Inspection, ItemStatus, MaintenanceLog, Vehicle } from "./types";
+import type { Account } from "./accounts";
 import { todayISO, uid } from "./utils";
 
 const EMPTY_MAINT: MaintenanceLog = {
@@ -35,6 +36,8 @@ type GarageState = {
   vehicleUpdatedAt: string;
   dataUpdatedAt: string;
   tombstones: Record<string, string>;
+  accounts: Account[];
+  accountTombstones: Record<string, string>;
   inspections: Inspection[];
   setHydrated: (v: boolean) => void;
   setVehicle: (patch: Partial<Vehicle>) => void;
@@ -48,11 +51,15 @@ type GarageState = {
   setItemNote: (id: string, itemId: string, note: string) => void;
   deleteInspection: (id: string) => void;
   duplicateInspection: (id: string) => Inspection | null;
+  saveAccount: (account: Account) => void;
+  deleteAccount: (username: string) => void;
   replaceSynced: (snapshot: {
     vehicle: Vehicle;
     vehicleUpdatedAt: string;
     inspections: Inspection[];
     tombstones: Record<string, string>;
+    accounts: Account[];
+    accountTombstones: Record<string, string>;
     dataUpdatedAt: string;
   }) => void;
 };
@@ -65,6 +72,8 @@ export const useGarage = create<GarageState>()(
       vehicleUpdatedAt: "",
       dataUpdatedAt: "",
       tombstones: {},
+      accounts: [],
+      accountTombstones: {},
       inspections: [],
       setHydrated: (v) => set({ hydrated: v }),
       setVehicle: (patch) =>
@@ -135,12 +144,31 @@ export const useGarage = create<GarageState>()(
         }));
         return copy;
       },
+      saveAccount: (account) =>
+        set((s) => ({
+          dataUpdatedAt: new Date().toISOString(),
+          accountTombstones: Object.fromEntries(
+            Object.entries(s.accountTombstones ?? {}).filter(([name]) => name !== account.username),
+          ),
+          accounts: [
+            account,
+            ...(s.accounts ?? []).filter((item) => item.username !== account.username),
+          ],
+        })),
+      deleteAccount: (username) =>
+        set((s) => ({
+          dataUpdatedAt: new Date().toISOString(),
+          accountTombstones: { ...(s.accountTombstones ?? {}), [username]: new Date().toISOString() },
+          accounts: (s.accounts ?? []).filter((item) => item.username !== username),
+        })),
       replaceSynced: (snapshot) =>
         set({
           vehicle: snapshot.vehicle,
           vehicleUpdatedAt: snapshot.vehicleUpdatedAt,
           inspections: snapshot.inspections,
           tombstones: snapshot.tombstones,
+          accounts: snapshot.accounts,
+          accountTombstones: snapshot.accountTombstones,
           dataUpdatedAt: snapshot.dataUpdatedAt,
         }),
     }),
@@ -155,6 +183,8 @@ export const useGarage = create<GarageState>()(
         vehicleUpdatedAt: s.vehicleUpdatedAt,
         dataUpdatedAt: s.dataUpdatedAt,
         tombstones: s.tombstones,
+        accounts: s.accounts,
+        accountTombstones: s.accountTombstones,
         inspections: s.inspections,
       }),
     },

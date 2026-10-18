@@ -8,7 +8,9 @@ import {
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { Logo } from "@/components/logo";
+import { LoginScreen } from "@/components/login-screen";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -41,12 +43,35 @@ const NAV = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const hydrated = useGarage((s) => s.hydrated);
+  const accounts = useGarage((s) => s.accounts ?? []);
+  const username = useSession((s) => s.username);
+  const sessionReady = useSession((s) => s.ready);
+  const label = accounts.find((account) => account.username === username)?.label ?? username;
 
   useEffect(() => {
     void Promise.resolve(useGarage.persist.rehydrate()).then(() => {
       useGarage.getState().setHydrated(true);
     });
+    useSession.getState().restore();
   }, []);
+
+  useEffect(() => {
+    if (!hydrated || !username) return;
+    if (!accounts.some((account) => account.username === username)) {
+      useSession.getState().logout();
+    }
+  }, [hydrated, username, accounts]);
+
+  if (!hydrated || !sessionReady) {
+    return (
+      <div className="grid min-h-dvh place-items-center bg-background text-sm text-muted-foreground">
+        Chargement…
+      </div>
+    );
+  }
+
+  if (!username) return <LoginScreen />;
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -77,6 +102,16 @@ export function AppShell({ children }: { children: ReactNode }) {
               );
             })}
           </nav>
+          <div className="flex items-center gap-3">
+            <span className="max-w-32 truncate text-sm text-paper/80">{label}</span>
+            <button
+              type="button"
+              className="text-sm text-paper/70 hover:text-paper"
+              onClick={() => useSession.getState().logout()}
+            >
+              Quitter
+            </button>
+          </div>
         </div>
       </header>
 

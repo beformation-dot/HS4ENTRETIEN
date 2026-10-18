@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useGarage } from "@/lib/store";
+import type { Account } from "@/lib/accounts";
 import type { Inspection, Vehicle } from "@/lib/types";
 
 const CODE_KEY = "atelier-hs4-sync-code";
@@ -12,6 +13,8 @@ export type SyncSnapshot = {
   vehicleUpdatedAt: string;
   inspections: Inspection[];
   tombstones: Record<string, string>;
+  accounts: Account[];
+  accountTombstones: Record<string, string>;
   updatedAt: string;
 };
 
@@ -59,6 +62,8 @@ function localSnapshot(): SyncSnapshot {
     vehicleUpdatedAt: s.vehicleUpdatedAt ?? "",
     inspections: s.inspections,
     tombstones: s.tombstones ?? {},
+    accounts: s.accounts ?? [],
+    accountTombstones: s.accountTombstones ?? {},
     updatedAt: s.dataUpdatedAt ?? "",
   };
 }
@@ -84,24 +89,47 @@ export function mergeSnapshots(a: SyncSnapshot, b: SyncSnapshot): SyncSnapshot {
       return !tomb || tomb < (item.updatedAt || "");
     })
     .sort((x, y) => (y.updatedAt || "").localeCompare(x.updatedAt || ""));
+  const accountTombstones: Record<string, string> = {};
+  for (const src of [a.accountTombstones ?? {}, b.accountTombstones ?? {}]) {
+    for (const [id, at] of Object.entries(src)) {
+      if (!accountTombstones[id] || at > accountTombstones[id]) accountTombstones[id] = at;
+    }
+  }
+  const byName = new Map<string, Account>();
+  for (const item of [...(b.accounts ?? []), ...(a.accounts ?? [])]) {
+    const prev = byName.get(item.username);
+    if (!prev || (item.updatedAt || "") >= (prev.updatedAt || "")) byName.set(item.username, item);
+  }
+  const accounts = [...byName.values()].filter((item) => {
+    const tomb = accountTombstones[item.username];
+    return !tomb || tomb < (item.updatedAt || "");
+  });
   return {
     v: 1,
     vehicle: vehicleIsA ? a.vehicle : b.vehicle,
     vehicleUpdatedAt: vehicleIsA ? a.vehicleUpdatedAt : b.vehicleUpdatedAt,
     inspections,
     tombstones,
+    accounts,
+    accountTombstones,
     updatedAt: (a.updatedAt || "") >= (b.updatedAt || "") ? a.updatedAt : b.updatedAt,
   };
 }
 
 function contentKey(s: SyncSnapshot) {
   const inspections = [...s.inspections].sort((a, b) => a.id.localeCompare(b.id));
-  const tombstones = Object.fromEntries(Object.entries(s.tombstones).sort(([a], [b]) => a.localeCompare(b)));
+  const tombstones = Object.fromEntries(Object.entries(s.tombstones ?? {}).sort(([a], [b]) => a.localeCompare(b)));
+  const accounts = [...(s.accounts ?? [])].sort((a, b) => a.username.localeCompare(b.username));
+  const accountTombstones = Object.fromEntries(
+    Object.entries(s.accountTombstones ?? {}).sort(([a], [b]) => a.localeCompare(b)),
+  );
   return JSON.stringify({
     vehicle: s.vehicle,
     vehicleUpdatedAt: s.vehicleUpdatedAt,
     inspections,
     tombstones,
+    accounts,
+    accountTombstones,
   });
 }
 
@@ -173,6 +201,8 @@ function applySnapshot(snapshot: SyncSnapshot) {
       vehicleUpdatedAt: merged.vehicleUpdatedAt,
       inspections: merged.inspections,
       tombstones: merged.tombstones,
+      accounts: merged.accounts ?? [],
+      accountTombstones: merged.accountTombstones ?? {},
       dataUpdatedAt: merged.updatedAt || new Date().toISOString(),
     });
     applying = false;
