@@ -101,7 +101,10 @@ export function SyncPanel() {
           <Button
             onClick={() => {
               setError("");
-              void createLink().catch(() => setError("Impossible de créer le lien."));
+              void createLink().catch(() => {
+                setError("Impossible de créer le lien.");
+                useSyncUi.setState({ phase: "error", message: "Pas de réseau. Réessayez." });
+              });
             }}
           >
             Créer le lien
@@ -116,7 +119,10 @@ export function SyncPanel() {
             variant="outline"
             onClick={() => {
               setError("");
-              void joinLink(draft).catch(() => setError("Code incomplet."));
+              void joinLink(draft).catch(() => {
+                setError("Code incomplet.");
+                useSyncUi.setState({ phase: "error", message: "Code incomplet." });
+              });
             }}
           >
             Relier

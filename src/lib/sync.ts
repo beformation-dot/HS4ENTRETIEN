@@ -205,7 +205,11 @@ async function connect(code: string) {
   window.clearTimeout(waitTimer);
   client?.end(true);
   setUi({ code, phase: "connecting", message: "Connexion…" });
-  const mqtt = await import("mqtt");
+  const imported = await import("mqtt");
+  const mqtt =
+    typeof (imported as { connectAsync?: unknown }).connectAsync === "function"
+      ? imported
+      : (imported as unknown as { default: typeof imported }).default;
   const next = await mqtt.connectAsync(BROKER, {
     clientId: `hs4${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}`,
     reconnectPeriod: 4000,
