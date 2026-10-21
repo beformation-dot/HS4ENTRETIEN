@@ -6,6 +6,7 @@ export type Account = {
   salt: string;
   hash: string;
   updatedAt: string;
+  admin?: boolean;
 };
 
 export function normalizeUsername(raw: string) {
@@ -37,7 +38,11 @@ async function derive(password: string, salt: Uint8Array) {
   return bytesToB64(new Uint8Array(bits));
 }
 
-export async function createAccount(label: string, password: string): Promise<Account> {
+export async function createAccount(
+  label: string,
+  password: string,
+  admin = false,
+): Promise<Account> {
   const username = normalizeUsername(label);
   const salt = crypto.getRandomValues(new Uint8Array(16));
   return {
@@ -46,6 +51,7 @@ export async function createAccount(label: string, password: string): Promise<Ac
     salt: bytesToB64(salt),
     hash: await derive(password, salt),
     updatedAt: new Date().toISOString(),
+    admin,
   };
 }
 

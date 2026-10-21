@@ -159,11 +159,14 @@ export const useGarage = create<GarageState>()(
           ],
         })),
       deleteAccount: (username) =>
-        set((s) => ({
-          dataUpdatedAt: new Date().toISOString(),
-          accountTombstones: { ...(s.accountTombstones ?? {}), [username]: new Date().toISOString() },
-          accounts: (s.accounts ?? []).filter((item) => item.username !== username),
-        })),
+        set((s) => {
+          if ((s.accounts ?? []).some((item) => item.username === username && item.admin)) return s;
+          return {
+            dataUpdatedAt: new Date().toISOString(),
+            accountTombstones: { ...(s.accountTombstones ?? {}), [username]: new Date().toISOString() },
+            accounts: (s.accounts ?? []).filter((item) => item.username !== username),
+          };
+        }),
       replaceSynced: (snapshot) =>
         set({
           vehicle: snapshot.vehicle,
@@ -196,6 +199,14 @@ export const useGarage = create<GarageState>()(
 
 export function useInspection(id: string | undefined) {
   return useGarage((s) => s.inspections.find((i) => i.id === id));
+}
+
+export function ensureAdmin() {
+  const accounts = useGarage.getState().accounts ?? [];
+  if (accounts.length === 0 || accounts.some((account) => account.admin)) return;
+  const first = [...accounts].sort((a, b) => (a.updatedAt || "").localeCompare(b.updatedAt || ""))[0];
+  if (!first) return;
+  useGarage.getState().saveAccount({ ...first, admin: true });
 }
 
 export function claimLegacyInspections(username: string) {

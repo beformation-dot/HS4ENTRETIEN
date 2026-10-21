@@ -9,7 +9,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Logo } from "@/components/logo";
 import { LoginScreen } from "@/components/login-screen";
-import { useGarage, claimLegacyInspections } from "@/lib/store";
+import { useGarage, claimLegacyInspections, ensureAdmin } from "@/lib/store";
 import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +47,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const accounts = useGarage((s) => s.accounts ?? []);
   const username = useSession((s) => s.username);
   const sessionReady = useSession((s) => s.ready);
-  const label = accounts.find((account) => account.username === username)?.label ?? username;
+  const current = accounts.find((account) => account.username === username);
+  const label = current?.label ?? username;
 
   useEffect(() => {
     void Promise.resolve(useGarage.persist.rehydrate()).then(() => {
@@ -58,6 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!hydrated || !username) return;
+    ensureAdmin();
     claimLegacyInspections(username);
     if (!accounts.some((account) => account.username === username)) {
       useSession.getState().logout();
@@ -104,7 +106,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             })}
           </nav>
           <div className="flex items-center gap-3">
-            <span className="max-w-32 truncate text-sm text-paper/80">{label}</span>
+            <span className="max-w-32 truncate text-sm text-paper/80">
+              {label}
+              {current?.admin ? " · admin" : ""}
+            </span>
             <button
               type="button"
               className="text-sm text-paper/70 hover:text-paper"

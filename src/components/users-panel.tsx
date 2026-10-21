@@ -10,6 +10,8 @@ export function UsersPanel() {
   const saveAccount = useGarage((s) => s.saveAccount);
   const deleteAccount = useGarage((s) => s.deleteAccount);
   const current = useSession((s) => s.username);
+  const me = accounts.find((account) => account.username === current);
+  const isAdmin = Boolean(me?.admin);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,18 +21,23 @@ export function UsersPanel() {
     <section className="mt-4 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
       <h2 className="text-2xl">Utilisateurs</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Chaque personne entre avec son identifiant et son mot de passe.
+        {isAdmin
+          ? "Vous êtes administrateur : vous ajoutez et retirez les comptes."
+          : "Seul l'administrateur ajoute ou retire un compte."}
       </p>
       <ul className="mt-4 divide-y divide-border">
         {accounts.map((account) => (
           <li key={account.username} className="flex items-center justify-between gap-3 py-2">
             <span>
               {account.label}
+              {account.admin ? (
+                <span className="ml-2 text-sm text-muted-foreground">administrateur</span>
+              ) : null}
               {account.username === current ? (
                 <span className="ml-2 text-sm text-muted-foreground">vous</span>
               ) : null}
             </span>
-            {accounts.length > 1 && account.username !== current ? (
+            {isAdmin && !account.admin ? (
               <Button
                 variant="outline"
                 size="sm"
@@ -44,6 +51,7 @@ export function UsersPanel() {
           </li>
         ))}
       </ul>
+      {isAdmin ? (
       <form
         className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
         onSubmit={(event) => {
@@ -90,6 +98,7 @@ export function UsersPanel() {
         </Button>
         {error ? <p className="text-sm text-muted-foreground sm:col-span-3">{error}</p> : null}
       </form>
+      ) : null}
     </section>
   );
 }

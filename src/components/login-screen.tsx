@@ -56,7 +56,7 @@ export function LoginScreen() {
           setError("Cet identifiant existe déjà.");
           return;
         }
-        const account = await createAccount(name, password);
+        const account = await createAccount(name, password, accounts.length === 0);
         saveAccount(account);
         useSession.getState().login(account.username);
         return;
