@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Inspection, ItemStatus, MaintenanceLog, Vehicle } from "./types";
 import type { Account } from "./accounts";
+import { useSession } from "./session";
 import { todayISO, uid } from "./utils";
 
 const EMPTY_MAINT: MaintenanceLog = {
@@ -12,7 +13,7 @@ const EMPTY_MAINT: MaintenanceLog = {
   other: "",
 };
 
-export function emptyInspection(vehicle: Vehicle): Inspection {
+export function emptyInspection(vehicle: Vehicle, owner: string): Inspection {
   const now = new Date().toISOString();
   return {
     id: uid(),
@@ -27,6 +28,7 @@ export function emptyInspection(vehicle: Vehicle): Inspection {
     observation: "",
     maintenance: { ...EMPTY_MAINT },
     status: "draft",
+    owner,
   };
 }
 
@@ -137,6 +139,7 @@ export const useGarage = create<GarageState>()(
           items: { ...src.items },
           notes: { ...src.notes },
           maintenance: { ...src.maintenance },
+          owner: useSession.getState().username || src.owner,
         };
         set((s) => ({
           inspections: [copy, ...s.inspections],
@@ -193,4 +196,17 @@ export const useGarage = create<GarageState>()(
 
 export function useInspection(id: string | undefined) {
   return useGarage((s) => s.inspections.find((i) => i.id === id));
+}
+
+export function claimLegacyInspections(username: string) {
+  const { accounts, inspections } = useGarage.getState();
+  if (!username || inspections.every((item) => item.owner)) return;
+  const first = [...accounts].sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))[0];
+  if (!first || first.username !== username) return;
+  useGarage.setState((s) => ({
+    dataUpdatedAt: new Date().toISOString(),
+    inspections: s.inspections.map((item) =>
+      item.owner ? item : { ...item, owner: username },
+    ),
+  }));
 }

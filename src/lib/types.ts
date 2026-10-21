@@ -38,6 +38,7 @@ export type Inspection = {
   observation: string;
   maintenance: MaintenanceLog;
   status: "draft" | "complete";
+  owner?: string;
 };
 
 export type Vehicle = {

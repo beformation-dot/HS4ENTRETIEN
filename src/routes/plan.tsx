@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { HOTSPOTS } from "@/lib/diagram";
 import { ITEM_BY_ID, ITEMS, STATUS_META } from "@/lib/checklist";
 import { emptyInspection, useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import type { ItemStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -14,20 +15,21 @@ export const Route = createFileRoute("/plan")({ component: PlanPage });
 
 function PlanPage() {
   const inspections = useGarage((s) => s.inspections);
+  const username = useSession((s) => s.username);
+  const mine = inspections.filter((i) => i.owner === username);
   const vehicle = useGarage((s) => s.vehicle);
   const addInspection = useGarage((s) => s.addInspection);
   const setItemStatus = useGarage((s) => s.setItemStatus);
   const [activeId, setActiveId] = useState<string>("1");
 
-  const draft =
-    inspections.find((i) => i.status === "draft") ?? inspections[0] ?? null;
+  const draft = mine.find((i) => i.status === "draft") ?? mine[0] ?? null;
 
   const item = ITEM_BY_ID[activeId] ?? ITEMS[0];
   const status = draft?.items[item.id];
 
   function ensureDraft() {
     if (draft) return draft.id;
-    const insp = emptyInspection(vehicle);
+    const insp = emptyInspection(vehicle, username ?? "");
     addInspection(insp);
     return insp.id;
   }

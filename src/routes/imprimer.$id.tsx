@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { ITEMS, SECTIONS, itemsForSection, tally } from "@/lib/checklist";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import type { ItemStatus } from "@/lib/types";
 import { cn, formatDate, formatKm } from "@/lib/utils";
 
@@ -14,12 +15,14 @@ export const Route = createFileRoute("/imprimer/$id")({
 
 function PrintPage() {
   const { id } = Route.useParams();
+  const username = useSession((s) => s.username);
   const inspection = useGarage((s) => s.inspections.find((i) => i.id === id));
+  const visible = inspection?.owner === username;
   const vehicle = useGarage((s) => s.vehicle);
   const update = useGarage((s) => s.updateInspection);
   const [pdfBusy, setPdfBusy] = useState(false);
 
-  if (!inspection) {
+  if (!inspection || !visible) {
     return (
       <AppShell>
         <h1 className="text-3xl">Fiche introuvable</h1>

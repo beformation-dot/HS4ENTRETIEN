@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { emptyInspection, useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import { ITEMS } from "@/lib/checklist";
 import { todayISO } from "@/lib/utils";
 
@@ -43,6 +44,7 @@ export function NewInspectionDialog({
   const vehicle = useGarage((s) => s.vehicle);
   const setVehicle = useGarage((s) => s.setVehicle);
   const addInspection = useGarage((s) => s.addInspection);
+  const username = useSession((s) => s.username);
 
   const [date, setDate] = useState(todayISO());
   const [km, setKm] = useState(vehicle.km);
@@ -59,7 +61,7 @@ export function NewInspectionDialog({
 
   function start() {
     setVehicle({ km, plate, year });
-    const insp = emptyInspection({ ...vehicle, km, plate, year });
+    const insp = emptyInspection({ ...vehicle, km, plate, year }, username ?? "");
     insp.date = date;
     addInspection(insp);
     onOpenChange(false);

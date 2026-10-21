@@ -9,7 +9,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Logo } from "@/components/logo";
 import { LoginScreen } from "@/components/login-screen";
-import { useGarage } from "@/lib/store";
+import { useGarage, claimLegacyInspections } from "@/lib/store";
 import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +58,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!hydrated || !username) return;
+    claimLegacyInspections(username);
     if (!accounts.some((account) => account.username === username)) {
       useSession.getState().logout();
     }

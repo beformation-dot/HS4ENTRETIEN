@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ITEMS, tally } from "@/lib/checklist";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import { formatDate, formatKm } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -21,7 +22,8 @@ function Home() {
   const hydrated = useGarage((s) => s.hydrated);
   const vehicle = useGarage((s) => s.vehicle);
   const setVehicle = useGarage((s) => s.setVehicle);
-  const inspections = useGarage((s) => s.inspections);
+  const username = useSession((s) => s.username);
+  const inspections = useGarage((s) => s.inspections).filter((i) => i.owner === username);
 
   const last = inspections[0];
   const lastT = last ? tally(last) : null;

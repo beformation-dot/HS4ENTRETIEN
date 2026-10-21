@@ -3,11 +3,13 @@ import { AppShell } from "@/components/app-shell";
 import { InspectionCard } from "@/components/inspection-card";
 import { NewInspectionButton } from "@/components/new-inspection";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/controle/")({ component: ControleIndex });
 
 function ControleIndex() {
-  const inspections = useGarage((s) => s.inspections);
+  const username = useSession((s) => s.username);
+  const inspections = useGarage((s) => s.inspections).filter((i) => i.owner === username);
   const drafts = inspections.filter((i) => i.status === "draft");
   const done = inspections.filter((i) => i.status === "complete");
 

@@ -5,6 +5,7 @@ import { InspectionCard } from "@/components/inspection-card";
 import { NewInspectionButton } from "@/components/new-inspection";
 import { Button } from "@/components/ui/button";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/historique")({
@@ -12,7 +13,8 @@ export const Route = createFileRoute("/historique")({
 });
 
 function HistoryPage() {
-  const inspections = useGarage((s) => s.inspections);
+  const username = useSession((s) => s.username);
+  const inspections = useGarage((s) => s.inspections).filter((i) => i.owner === username);
   const duplicate = useGarage((s) => s.duplicateInspection);
   const remove = useGarage((s) => s.deleteInspection);
   const navigate = useNavigate();
@@ -29,8 +31,7 @@ function HistoryPage() {
         <NewInspectionButton label="Nouveau" size="sm" />
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-        Toutes les check-lists restent sur cet appareil. Dupliquez une fiche
-        pour repartir des mêmes constats.
+        Toutes vos check-lists. Celles des autres utilisateurs restent chez eux.
       </p>
 
       <div className="mt-6 grid gap-4">

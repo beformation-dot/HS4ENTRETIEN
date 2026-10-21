@@ -16,6 +16,7 @@ import {
   tally,
 } from "@/lib/checklist";
 import { useGarage } from "@/lib/store";
+import { useSession } from "@/lib/session";
 import type { ItemStatus, SectionId, StatusFilter } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,9 @@ const FILTERS: { id: StatusFilter; label: string }[] = [
 function InspectionEditor() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
+  const username = useSession((s) => s.username);
   const inspection = useGarage((s) => s.inspections.find((i) => i.id === id));
+  const allowed = inspection?.owner === username;
   const update = useGarage((s) => s.updateInspection);
   const setStatus = useGarage((s) => s.setItemStatus);
   const setNote = useGarage((s) => s.setItemNote);
@@ -64,7 +67,7 @@ function InspectionEditor() {
     });
   }, [filter, section, inspection]);
 
-  if (!inspection) {
+  if (!inspection || !allowed) {
     return (
       <AppShell>
         <h1 className="text-3xl">Contrôle introuvable</h1>
