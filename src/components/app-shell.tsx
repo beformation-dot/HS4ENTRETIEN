@@ -9,6 +9,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Logo } from "@/components/logo";
 import { LoginScreen } from "@/components/login-screen";
+import { UsersPanel } from "@/components/users-panel";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useGarage, claimLegacyInspections, ensureAdmin } from "@/lib/store";
 import { useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
@@ -106,10 +108,20 @@ export function AppShell({ children }: { children: ReactNode }) {
             })}
           </nav>
           <div className="flex items-center gap-3">
-            <span className="max-w-32 truncate text-sm text-paper/80">
-              {label}
-              {current?.admin ? " · admin" : ""}
-            </span>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="min-h-11 max-w-[46vw] truncate rounded-md px-2 text-left text-sm text-paper underline decoration-primary underline-offset-4 hover:bg-white/10"
+                >
+                  {label}
+                  {current?.admin ? " · admin" : ""}
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[85dvh] w-[min(40rem,calc(100%-1.5rem))] overflow-y-auto">
+                <UsersPanel plain />
+              </DialogContent>
+            </Dialog>
             <button
               type="button"
               className="text-sm text-paper/70 hover:text-paper"

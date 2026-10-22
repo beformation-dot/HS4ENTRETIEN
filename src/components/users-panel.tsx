@@ -5,7 +5,7 @@ import { createAccount, normalizeUsername } from "@/lib/accounts";
 import { useSession } from "@/lib/session";
 import { useGarage } from "@/lib/store";
 
-export function UsersPanel() {
+export function UsersPanel({ plain = false }: { plain?: boolean }) {
   const accounts = useGarage((s) => s.accounts ?? []);
   const saveAccount = useGarage((s) => s.saveAccount);
   const deleteAccount = useGarage((s) => s.deleteAccount);
@@ -18,7 +18,13 @@ export function UsersPanel() {
   const [busy, setBusy] = useState(false);
 
   return (
-    <section className="mt-4 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
+    <section
+      className={
+        plain
+          ? "bg-card pr-8"
+          : "mt-4 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]"
+      }
+    >
       <h2 className="text-2xl">Utilisateurs</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {isAdmin
