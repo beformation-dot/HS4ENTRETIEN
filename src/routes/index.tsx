@@ -40,7 +40,7 @@ function Home() {
     <AppShell>
       <section className="overflow-hidden rounded-xl bg-card shadow-[var(--shadow-border)]">
         <img
-          src="/images/hero.jpg"
+          src="/images/hero-trike.jpg"
           alt="Atelier Trike — Rewaco dans l'atelier"
           className="h-auto w-full object-cover"
         />
