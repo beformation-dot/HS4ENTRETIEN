@@ -41,7 +41,7 @@ function Home() {
       <section className="overflow-hidden rounded-xl bg-card shadow-[var(--shadow-border)]">
         <img
           src="/images/hero.jpg"
-          alt="Atelier HS4 — Rewaco dans l'atelier"
+          alt="Atelier Trike — Rewaco dans l'atelier"
           className="h-auto w-full object-cover"
         />
         <div className="flex flex-col justify-between p-5 sm:p-7">

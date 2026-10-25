@@ -82,7 +82,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-dvh bg-background text-foreground">
       <header className="no-print sticky top-0 z-40 bg-ink text-paper">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4">
-          <Link to="/" className="shrink-0" aria-label="Atelier HS4">
+          <Link to="/" className="shrink-0" aria-label="Atelier Trike">
             <Logo className="text-paper" />
           </Link>
           <nav className="hidden items-center gap-0 md:flex">

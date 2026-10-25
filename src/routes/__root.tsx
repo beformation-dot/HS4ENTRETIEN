@@ -10,7 +10,7 @@ import { RegisterApp } from "@/components/install-app";
 import { SyncEngine } from "@/components/sync-panel";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Atelier HS4";
+const APP_NAME = "Atelier Trike";
 
 export const Route = createRootRoute({
   head: () => ({

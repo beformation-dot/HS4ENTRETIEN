@@ -26,8 +26,8 @@ export function Logo({ className }: { className?: string }) {
           strokeLinecap="round"
         />
       </svg>
-      <span className="font-display text-lg font-semibold tracking-[0.14em] uppercase">
-        Atelier HS4
+      <span className="font-display text-lg font-semibold tracking-[0.08em] uppercase sm:tracking-[0.14em]">
+        Atelier Trike
       </span>
     </span>
   );
